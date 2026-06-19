@@ -14,6 +14,7 @@ function Lookup({ masterList }) {
         const { searchKey, minKi, maxKi } = searchValues;
         
         const results = (masterList || []).filter((character) => {
+            // check if the first or second word in the name of the current character match
             const matchesName = character.name.toLowerCase().split(' ').some(word => word.startsWith(searchKey.toLowerCase()));
             
             const characterKi = parseKi(character.ki);
@@ -61,7 +62,8 @@ const parseKi = (kiString) => {
     const cleanStr = kiString.replace(/[,.]/g, '').toLowerCase().trim();
     const words = ['billion', 'trillion', 'quadrillion', 'quintillion', 'septillion', 'googolplex']
     if ( words.some(word => cleanStr.includes(word))) {
-        return Infinity;
+        // We assume there's no way the user will enter enough zeros for a billion or any greater power of ten
+        return Infinity; 
     }
 
     if (cleanStr.includes('unknown')) return 0;
